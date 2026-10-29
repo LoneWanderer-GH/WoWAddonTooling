@@ -1,0 +1,4 @@
+[submodule "packager"]
+	path = packager
+	url = https://github.com/BigWigsMods/packager.git
+	branch = master

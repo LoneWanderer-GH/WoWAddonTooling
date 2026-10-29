@@ -1,0 +1,57 @@
+name: Addon CI
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      targets: ${{ steps.targets.outputs.json }}
+    steps:
+      - name: Check out addon and tooling
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Read target list
+        id: targets
+        shell: bash
+        run: |
+          json="$(./addon-tooling/scripts/get-game-targets.sh "$(find . -maxdepth 1 -type f -name '*.toc' -print -quit)" | jq -R -s -c 'split("\n") | map(select(length > 0))')"
+          echo "json=${json}" >> "$GITHUB_OUTPUT"
+
+  package:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        game: ${{ fromJSON(needs.discover.outputs.targets) }}
+    steps:
+      - name: Check out addon and tooling
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install wowlua
+        run: curl -fsSL https://github.com/DomenikIrrgang/wowlua/releases/latest/download/install.sh | WOWLUA_VERSION=v0.13.6 sh
+
+      - name: Validate Lua syntax
+        run: ./addon-tooling/scripts/check-lua.sh
+
+      - name: Build package
+        uses: BigWigsMods/packager@0f24d2169de3ceb3b79a981311b2ebab4c6160c7
+        with:
+          args: -d -g ${{ matrix.game }}
+
+      - name: Save package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ github.event.repository.name }}-${{ matrix.game }}-${{ github.sha }}
+          path: .release/*.zip
+          if-no-files-found: error
+          retention-days: 14
