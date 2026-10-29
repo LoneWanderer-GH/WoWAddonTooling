@@ -16,7 +16,7 @@ Add this repository as a submodule:
 
 ```bash
 git submodule add https://github.com/LoneWanderer-GH/WoWAddonTooling.git addon-tooling
-git -C addon-tooling checkout v1.0.1
+git -C addon-tooling checkout v1.0.2
 git add .gitmodules addon-tooling
 ```
 
@@ -45,7 +45,7 @@ permissions:
 
 jobs:
   package:
-    uses: LoneWanderer-GH/WoWAddonTooling/.github/workflows/addon-ci.yml@v1.0.1
+    uses: LoneWanderer-GH/WoWAddonTooling/.github/workflows/addon-ci.yml@v1.0.2
 ```
 
 ```yaml
@@ -60,7 +60,7 @@ permissions:
 
 jobs:
   publish:
-    uses: LoneWanderer-GH/WoWAddonTooling/.github/workflows/addon-release.yml@v1.0.1
+    uses: LoneWanderer-GH/WoWAddonTooling/.github/workflows/addon-release.yml@v1.0.2
     secrets: inherit
 ```
 
