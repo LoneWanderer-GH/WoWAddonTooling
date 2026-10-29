@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if ! command -v wowlua >/dev/null 2>&1; then
+WOWLUA_BIN="${WOWLUA_BIN:-wowlua}"
+if ! command -v "$WOWLUA_BIN" >/dev/null 2>&1; then
     printf 'wowlua is required for Lua syntax validation.\n' >&2
     exit 2
 fi
@@ -21,4 +22,4 @@ output_dir="$(mktemp -d "${TMPDIR:-/tmp}/wowaddon-wowlua.XXXXXX")"
 trap 'rm -rf "$output_dir"' EXIT
 
 printf 'Checking %d Lua file(s) with wowlua\n' "${#lua_files[@]}"
-wowlua compile "${lua_files[@]}" --no-bundle --out "$output_dir"
+"$WOWLUA_BIN" compile "${lua_files[@]}" --no-bundle --out "$output_dir"
