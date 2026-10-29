@@ -21,6 +21,12 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Install wowlua
+        run: curl -fsSL https://github.com/DomenikIrrgang/wowlua/releases/latest/download/install.sh | WOWLUA_VERSION=v0.13.6 sh
+
+      - name: Validate Lua syntax
+        run: ./addon-tooling/scripts/check-lua.sh
+
       - name: Read target list
         id: targets
         shell: bash

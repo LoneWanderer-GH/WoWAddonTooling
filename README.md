@@ -15,8 +15,9 @@ flavors, not a claim that the current game API has been tested:
 Add this repository as a submodule:
 
 ```bash
-git submodule add --branch v1.0.0 \
-  https://github.com/LoneWanderer-GH/WoWAddonTooling.git addon-tooling
+git submodule add https://github.com/LoneWanderer-GH/WoWAddonTooling.git addon-tooling
+git -C addon-tooling checkout v1.0.1
+git add .gitmodules addon-tooling
 ```
 
 Initialize it when cloning:
@@ -44,7 +45,7 @@ permissions:
 
 jobs:
   package:
-    uses: LoneWanderer-GH/WoWAddonTooling/.github/workflows/addon-ci.yml@v1.0.0
+    uses: LoneWanderer-GH/WoWAddonTooling/.github/workflows/addon-ci.yml@v1.0.1
 ```
 
 ```yaml
@@ -59,7 +60,7 @@ permissions:
 
 jobs:
   publish:
-    uses: LoneWanderer-GH/WoWAddonTooling/.github/workflows/addon-release.yml@v1.0.0
+    uses: LoneWanderer-GH/WoWAddonTooling/.github/workflows/addon-release.yml@v1.0.1
     secrets: inherit
 ```
 

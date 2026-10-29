@@ -17,7 +17,8 @@ if [[ "${#lua_files[@]}" -eq 0 ]]; then
     exit 2
 fi
 
-for source in "${lua_files[@]}"; do
-    printf 'Checking %s\n' "$source"
-    wowlua compile "$source" --no-bundle >/dev/null
-done
+output_dir="$(mktemp -d "${TMPDIR:-/tmp}/wowaddon-wowlua.XXXXXX")"
+trap 'rm -rf "$output_dir"' EXIT
+
+printf 'Checking %d Lua file(s) with wowlua\n' "${#lua_files[@]}"
+wowlua compile "${lua_files[@]}" --no-bundle --out "$output_dir"
